@@ -27,13 +27,13 @@ export default class Footer extends Component {
     }
 
     render() {
-        console.log('render');
+        //console.log('render');
         return (
             <footer className="footer">
                 <div>&copy; Formation React</div>
                 <Row>
-                    {this.state.brands.map(item =>
-                    (<Col>
+                    {this.state.brands.map((item, index) =>
+                    (<Col key={index}>
                         <Card style={{ width: '18rem' }}>
                             <Card.Img variant="top" src={`/images/${item.image}`} />
                             <Card.Body>
