@@ -1,17 +1,19 @@
 import './footer.css';
 import React, { Component } from 'react'
 import { Row, Col, Card } from 'react-bootstrap';
+import BrandsService from '../../services/BrandsService';
 
 export default class Footer extends Component {
 
+    servBrands = new BrandsService();
+
     //name = 'toto'; KO
-    state = {
-        brands: [
-            { name: 'Audi', image: 'audi.jpg' },
-            { name: 'BMW', image: 'bmw.jpg' },
-            { name: 'Renault', image: 'renault.jpg' }
-        ]
-    }
+    state = { brands: [] }
+    /*{ name: 'Audi', image: 'audi.jpg' },
+    { name: 'BMW', image: 'bmw.jpg' },
+    { name: 'Renault', image: 'renault.jpg' }
+]
+}*/
 
     /*brands = [
         { name: 'Audi', image: 'audi.jpg' },
@@ -24,6 +26,10 @@ export default class Footer extends Component {
         //this.state.name = 'bob'; KO
         //this.setState({ name: 'bob' });
         //console.log('componentDidMount', this.state.name);
+        //this.setState({ brands: this.servBrands.getBrands() });
+        this.servBrands.getBrands().then(data => {
+            this.setState({ brands: data });
+        });
     }
 
     render() {
