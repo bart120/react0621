@@ -10,7 +10,8 @@ export default class InputMail extends Component {
         name: PropTypes.string.isRequired,
         placeholder: PropTypes.string,
         validate: PropTypes.bool,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
+        children: PropTypes.element
     }
 
     state = { isInvalid: false };
