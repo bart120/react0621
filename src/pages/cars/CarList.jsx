@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Table } from 'react-bootstrap';
+import { Table, Toast } from 'react-bootstrap';
 import BrandsService from '../../core/services/BrandsService';
 import CarsService from '../../core/services/CarsService';
 import { Link } from 'react-router-dom';
 
 export default class CarList extends Component {
-    state = { cars: [] };
+    state = { cars: [], showToast: false, messageToast: '' };
 
     servCars = new CarsService();
     servBrands = new BrandsService();
@@ -40,11 +40,16 @@ export default class CarList extends Component {
 
     delete = (id) => {
         this.servCars.deleteCar(id).then(data => {
-            alert(`La voiture ${data.model} est supprimée.`, 'OK');
+            //alert(`La voiture ${data.model} est supprimée.`, 'OK');
+            this.setState({ messageToast: `La voiture ${data.model} est supprimée.` });
             return this.servCars.getCars();
         }).then(data =>
-            this.setState({ cars: data })
+            this.setState({ cars: data, showToast: true })
         );
+    }
+
+    closeToast = () => {
+        this.setState({ showToast: false, messageToast: '' });
     }
 
     render() {
@@ -82,6 +87,13 @@ export default class CarList extends Component {
                         })}
                     </tbody>
                 </Table>
+                <Toast show={this.state.showToast} onClose={this.closeToast}>
+                    <Toast.Header>
+                        <strong className="mr-auto">Suppression</strong>
+                        <small>just now</small>
+                    </Toast.Header>
+                    <Toast.Body>{this.state.messageToast}</Toast.Body>
+                </Toast>
             </div>
         )
     }
