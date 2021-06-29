@@ -11,7 +11,7 @@ export default class Header extends Component {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
                         <Link to="/" className="nav-link">Accueil</Link>
-                        <Link to="/cars/li" className="nav-link">Voitures</Link>
+                        <Link to="/cars/list" className="nav-link">Voitures</Link>
                         <Link to="/cars/create" className="nav-link">Ajouter</Link>
                         <Link to="/auth/login" className="nav-link">Connexion</Link>
                     </Nav>
