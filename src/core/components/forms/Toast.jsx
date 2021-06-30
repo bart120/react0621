@@ -1,14 +1,17 @@
 import { Toast as BootstrapToast } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { hideToast } from '../../redux/toastActions';
 
-export default class Toast extends Component {
-    static propTypes = {
+class Toast extends Component {
+    /*static propTypes = {
         title: PropTypes.string.isRequired,
         message: PropTypes.string.isRequired,
         show: PropTypes.bool,
         closeToast: PropTypes.func.isRequired
-    }
+    }*/
 
     //state = { showToast: false }
 
@@ -23,10 +26,14 @@ export default class Toast extends Component {
         }
     }*/
 
+    close = () => {
+        this.props.hide();
+    }
+
     render() {
-        //console.log('render toast');
+        console.log(this);
         return (
-            <BootstrapToast show={this.props.show} onClose={this.props.closeToast}>
+            <BootstrapToast show={this.props.show} onClose={this.close}>
                 <BootstrapToast.Header>
                     <strong className="mr-auto">{this.props.title}</strong>
                     <small>just now</small>
@@ -37,5 +44,13 @@ export default class Toast extends Component {
     }
 }
 
+const mapStateToProps = (stateReducer) => {
+    return { show: stateReducer.show, title: stateReducer.title, message: stateReducer.message };
+}
 
+const mapDispatchToProps = (payload) => {
+    return { hide: bindActionCreators(hideToast, payload) };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Toast)
 

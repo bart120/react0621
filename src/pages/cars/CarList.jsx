@@ -3,30 +3,27 @@ import { Table } from 'react-bootstrap';
 import BrandsService from '../../core/services/BrandsService';
 import CarsService from '../../core/services/CarsService';
 import { Link } from 'react-router-dom';
-import Toast from '../../core/components/forms/Toast';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { displayToast } from '../../core/redux/toastActions';
+//import Toast from '../../core/components/forms/Toast';
 
-export default class CarList extends Component {
-    state = { cars: [], showToast: false, messageToast: '', titleToast: 'Suppression' };
+class CarList extends Component {
+    state = { cars: [] };//, showToast: false, messageToast: '', titleToast: 'Suppression' };
 
     servCars = new CarsService();
     servBrands = new BrandsService();
 
     componentDidMount() {
         this.servCars.getCars().then(data => {
-            //Promise.all(data.map(x => this.servBrands.getBrandById(x.brandID)))
-
-
-
-            /*data.map(async x => {
-                //console.log('x', x);
-                //return this.servBrands.getBrandById(x.brandID).then(y => { x.brand = y.name; console.log('y', y); });
-                x.brand = "bob";//
-                console.log((await this.servBrands.getBrandById(x.brandID)).data.name);
-                console.log('x', x);
-                return x;
+            const proms = data.map(x => {
+                return this.servBrands.getBrandById(x.brandID).then(y => { x.brand = y.name; return x; });
             });
-            console.log('cars', data);*/
-            this.setState({ cars: data });
+            Promise.all(proms).then(values => {
+                this.setState({ cars: values });
+            })
+
+            //this.setState({ cars: data });
         });
     }
 
@@ -42,11 +39,12 @@ export default class CarList extends Component {
     delete = (id) => {
         this.servCars.deleteCar(id).then(data => {
             //alert(`La voiture ${data.model} est supprimée.`, 'OK');
-            this.setState({ messageToast: `La voiture ${data.model} est supprimée.` });
+            //this.setState({ messageToast: `La voiture ${data.model} est supprimée.` });
+            this.props.display({ title: 'Suppression', message: `La voiture ${data.model} est supprimée` });
             return this.servCars.getCars();
-        }).then(data =>
-            this.setState({ cars: data, showToast: true })
-        );
+        }).then(data => {
+            this.setState({ cars: data });
+        });
     }
 
     closeToast = () => {
@@ -88,8 +86,14 @@ export default class CarList extends Component {
                         })}
                     </tbody>
                 </Table>
-                <Toast title={this.state.titleToast} message={this.state.messageToast} show={this.state.showToast} closeToast={this.closeToast} />
+
             </div>
         )
     }
 }
+
+const mapDispatchToProps = (payload) => {
+    return { display: bindActionCreators(displayToast, payload) };
+}
+
+export default connect(null, mapDispatchToProps)(CarList)

@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import BrandsService from '../../core/services/BrandsService';
 import CarsService from '../../core/services/CarsService';
-import Toast from '../../core/components/forms/Toast';
+//import Toast from '../../core/components/forms/Toast';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { displayToast } from '../../core/redux/toastActions';
 
-export default class CarCreate extends Component {
+class CarCreate extends Component {
 
     servBrands = new BrandsService();
     servCars = new CarsService();
 
-    state = { brands: [], car: {}, showToast: false, messageToast: '', titleToast: '' }
+    state = { brands: [], car: {} };//, showToast: false, messageToast: '', titleToast: '' }
 
     componentDidMount() {
         this.servBrands.getBrands().then(data => {
@@ -20,10 +23,12 @@ export default class CarCreate extends Component {
 
     submit = (ev) => {
         ev.preventDefault();
-        this.servCars.insert(this.state.car).then((data) => {
-            this.setState({ showToast: true, titleToast: 'Bravo!', messageToast: `La voiture a été ajoutée.` });
+        /*this.servCars.insert(this.state.car).then((data) => {
+            //this.setState({ showToast: true, titleToast: 'Bravo!', messageToast: `La voiture a été ajoutée.` });
+            this.props.display({ title: 'Bravo!', message: 'La voiture a été ajoutée.' });
             this.props.history.push(`/cars/detail/${data.id}`)
-        });
+        });*/
+        this.props.display({ title: 'Bravo!', message: 'La voiture a été ajoutée.' });
 
     }
 
@@ -34,12 +39,12 @@ export default class CarCreate extends Component {
         this.setState({ car: newCar });
     }
 
-    closeToast = () => {
+    /*closeToast = () => {
         this.setState({ showToast: false });
-    }
+    }*/
 
     render() {
-        //console.log(this.props);
+        console.log(this);
         return (
             <>
                 <div>
@@ -71,8 +76,14 @@ export default class CarCreate extends Component {
                         </Button>
                     </Form>
                 </div>
-                <Toast title={this.state.titleToast} message={this.state.messageToast} show={this.state.showToast} closeToast={this.closeToast} />
+
             </>
         )
     }
 }
+
+const mapDispatchToProps = (payload) => {
+    return { display: bindActionCreators(displayToast, payload) }
+}
+
+export default connect(null, mapDispatchToProps)(CarCreate)
