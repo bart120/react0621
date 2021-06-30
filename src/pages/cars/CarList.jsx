@@ -19,11 +19,11 @@ class CarList extends Component {
             const proms = data.map(x => {
                 return this.servBrands.getBrandById(x.brandID).then(y => { x.brand = y.name; return x; });
             });
-            Promise.all(proms).then(values => {
-                this.setState({ cars: values });
-            })
 
-            //this.setState({ cars: data });
+            Promise.all(proms).then(values => {
+                //console.log(data);
+                this.setState({ cars: values });
+            });
         });
     }
 
