@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Table, Toast } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import BrandsService from '../../core/services/BrandsService';
 import CarsService from '../../core/services/CarsService';
 import { Link } from 'react-router-dom';
+import Toast from '../../core/components/forms/Toast';
 
 export default class CarList extends Component {
-    state = { cars: [], showToast: false, messageToast: '' };
+    state = { cars: [], showToast: false, messageToast: '', titleToast: 'Suppression' };
 
     servCars = new CarsService();
     servBrands = new BrandsService();
@@ -87,13 +88,7 @@ export default class CarList extends Component {
                         })}
                     </tbody>
                 </Table>
-                <Toast show={this.state.showToast} onClose={this.closeToast}>
-                    <Toast.Header>
-                        <strong className="mr-auto">Suppression</strong>
-                        <small>just now</small>
-                    </Toast.Header>
-                    <Toast.Body>{this.state.messageToast}</Toast.Body>
-                </Toast>
+                <Toast title={this.state.titleToast} message={this.state.messageToast} show={this.state.showToast} closeToast={this.closeToast} />
             </div>
         )
     }

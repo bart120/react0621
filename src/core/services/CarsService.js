@@ -15,4 +15,10 @@ export default class CarsService extends BaseService {
     deleteCar(id) {
         return this.delete(`${url}/${id}`);
     }
+
+    insert(car) {
+        car.brandID = +car.brandID;
+        car.price = +car.price;
+        return this.post(url, car);
+    }
 }
