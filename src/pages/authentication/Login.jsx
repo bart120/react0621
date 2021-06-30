@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import InputMail from '../../core/components/forms/InputMail';
+import { login } from '../../core/redux/authenticationActions';
 
-export default class Login extends Component {
+class Login extends Component {
 
     state = { login: '', password: '' };
 
@@ -21,7 +24,9 @@ export default class Login extends Component {
 
     submit = (ev) => {
         ev.preventDefault();
-        console.log(this.state);
+        //console.log(this.state);
+        //call sso server
+        this.props.login({ mail: this.state.login, name: 'Bob' });
     }
 
     render() {
@@ -49,3 +54,9 @@ export default class Login extends Component {
         )
     }
 }
+
+const mapDispatchToProps = (payload) => {
+    return { login: bindActionCreators(login, payload) };
+};
+
+export default connect(null, mapDispatchToProps)(Login)

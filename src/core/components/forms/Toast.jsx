@@ -33,19 +33,21 @@ class Toast extends Component {
     render() {
         console.log(this);
         return (
-            <BootstrapToast show={this.props.show} onClose={this.close}>
+            <BootstrapToast show={this.props.toast.show} onClose={this.close}>
                 <BootstrapToast.Header>
-                    <strong className="mr-auto">{this.props.title}</strong>
+                    <strong className="mr-auto">{this.props.toast.title}</strong>
                     <small>just now</small>
                 </BootstrapToast.Header>
-                <BootstrapToast.Body>{this.props.message}</BootstrapToast.Body>
+                <BootstrapToast.Body>{this.props.toast.message}</BootstrapToast.Body>
             </BootstrapToast>
         )
     }
 }
 
-const mapStateToProps = (stateReducer) => {
-    return { show: stateReducer.show, title: stateReducer.title, message: stateReducer.message };
+const mapStateToProps = (stateRootReducer) => {
+    //console.log('stateReducer', stateRootReducer);
+    //return { show: stateRootReducer.toast.show, title: stateRootReducer.toast.title, message: stateRootReducer.toast.message };
+    return { toast: stateRootReducer.toast };
 }
 
 const mapDispatchToProps = (payload) => {
